@@ -1,10 +1,11 @@
 import json
 import copy
 
-def read_input(file_name:str='8.1.input.txt') -> list:
+
+def read_input(file_name: str = '8.1.input.txt') -> list:
     with open(file_name, 'r', encoding='utf8') as f:
         input_lines = f.readlines()
-    
+
     return input_lines
 
 
@@ -23,6 +24,7 @@ def process_input(lines: list) -> dict:
     return instructions
     # print(instructions[5])
 
+
 def execute_boot(instructions: dict):
 
     boot_counter = 0
@@ -31,7 +33,7 @@ def execute_boot(instructions: dict):
     while True:
         if instructions[execute_next][2] == True:
             break
-        
+
         instructions[execute_next][2] = True
 
         if instructions[execute_next][0] == 'vic':
@@ -49,7 +51,7 @@ def execute_boot(instructions: dict):
         elif instructions[execute_next][0] == 'jmp':
             execute_next += instructions[execute_next][1]
             continue
-    
+
     # print(json.dumps(instructions, indent=2))
     print(boot_counter)
 
@@ -80,4 +82,3 @@ for key, value in processed_input.items():
         if execute_boot(modified_bootorder) is not None:
             print(key)
             print(value)
-    
