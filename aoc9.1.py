@@ -1,4 +1,4 @@
-def open_file(location:str='aoc9.1.input.txt') -> list:
+def open_file(location:str='9.1.input.txt') -> list:
     with open(location, 'r', encoding='utf8') as f:
         input_lines = f.readlines()
 
