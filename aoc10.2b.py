@@ -32,7 +32,7 @@ for adapter in sorted(options_dict):
         continue
 
     options = 0
-    # Look back three adapter values. If value exists in the collection, add it's options to current options.
+    # Look back three adapter values. If value exists in the collection, add its options to current options.
     for i in range(adapter-3, adapter):
         if i in options_dict:
             options += options_dict[i]
