@@ -20,13 +20,13 @@ heading = 90
 
 for item in instructions:
     if item[0] == 'N':
-        x -= item[1]
-    elif item[0] == 'S':
-        x += item[1]
-    elif item[0] == 'W':
         y -= item[1]
-    elif item[0] == 'E':
+    elif item[0] == 'S':
         y += item[1]
+    elif item[0] == 'W':
+        x -= item[1]
+    elif item[0] == 'E':
+        x += item[1]
     elif item[0] == 'R':
         heading += item[1]
     elif item[0] == 'L':
@@ -34,15 +34,15 @@ for item in instructions:
     elif item[0] == 'F':
         if (heading / 90) % 4 == 0:
             # print('heading north')
-            x -= item[1]
+            y -= item[1]
         elif (heading / 90) % 4 == 1:
             # print('heading east')
-            y += item[1]
+            x += item[1]
         elif (heading / 90) % 4 == 2:
             # print('heading south')
-            x += item[1]
+            y += item[1]
         elif (heading / 90) % 4 == 3:
             # print('heading west')
-            y -= item[1]
+            x -= item[1]
 
 print(f'x: {x}, y: {y}. Manhattan distance: {abs(x)+abs(y)}')
