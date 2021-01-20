@@ -6,8 +6,6 @@
 # puzzle_input = [0,3,6]
 puzzle_input = [0,6,1,7,2,19,20]
 
-# FIRST_MENTION = True
-
 number_ages = dict()
 
 # iterations = 10 # test input
