@@ -38,10 +38,8 @@ for instruction in instructions:
     if len(instruction) > 2 :
         current_mask = instruction
     if len(instruction) == 2:
-        # print(f'Now assignment instruction with mask: {current_mask}')
 
         base_address = instruction[0]
-        # print(f'Original address: {base_address:b}')
         count_floating_bits = 0
         floating_bit_positions = []
 
