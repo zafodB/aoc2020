@@ -14,7 +14,7 @@ def process_input(lines: list) -> list:
             instructions.append(line[7:].replace('\n', ''))
             # print(line[7:].replace('\n', ''))
         elif line[:3] == 'mem':
-            address = int(re.search("\[[0-9]*\]", line).group()[1:-1], base=10)
+            address = int(re.search(r"\[[0-9]*\]", line).group()[1:-1], base=10)
             value = int(line.split(' = ')[-1].replace('\n', ''), base=10)
             instructions.append((address, value))
     
