@@ -1,3 +1,5 @@
+import copy
+
 def open_file(location:str='17.1.input.txt') -> list:
     with open(location, 'r', encoding='utf8') as f:
         input_lines = f.readlines()
@@ -31,7 +33,7 @@ def find_if_extension_needed(state:list):
     """
     # expansion_dimensions: x+ x- y+ y- z+ z-
     expansion_dimensions = [False, False, False, False, False, False]
-    # z axis - up (+)
+    # z axis (+)
     for y_row in state[0]:
         for x_cube in y_row:
             if x_cube == '#':
@@ -41,7 +43,7 @@ def find_if_extension_needed(state:list):
         if expansion_dimensions[4]:
             break
     
-    # z axis - down (-)
+    # z axis (-)
     for y_row in state[-1]:
         for x_cube in y_row:
             if x_cube == '#':
@@ -71,25 +73,26 @@ def find_if_extension_needed(state:list):
         if expansion_dimensions[3] == True:
             break
     
-    # x asix (?)
+    # x asix (-)
     for z_plane in state:
         for y_row in z_plane:
             if y_row[0] == '#':
-                expansion_dimensions[0] = True
-                break
-        
-        if expansion_dimensions[0] == True:
-            break
-    
-    # x asix (?)
-    for z_plane in state:
-        for y_row in z_plane:
-            if y_row[-1] == '#':
                 expansion_dimensions[1] = True
                 break
         
         if expansion_dimensions[1] == True:
             break
+    
+    # x asix (+)
+    for z_plane in state:
+        for y_row in z_plane:
+            if y_row[-1] == '#':
+                expansion_dimensions[0] = True
+                break
+        
+        if expansion_dimensions[0] == True:
+            break
+
     return tuple(expansion_dimensions)
 
 # Enlarge the field according to instructions
@@ -166,7 +169,6 @@ def check_active_neighbours(state, x, y, z) -> int:
     return active_neighbours
     
 
-import copy
 def play_round(state: list) -> list:
     new_state = copy.deepcopy(state)
 
@@ -174,27 +176,24 @@ def play_round(state: list) -> list:
         for index_y, y_row in enumerate(z_plane):
             for index_x, x_cube in enumerate(y_row):
                 active = check_active_neighbours(state, index_x, index_y, index_z)
-                # print(active, end=' ')
                 if x_cube == '.' and active == 3:
                     new_state[index_z][index_y][index_x] = '#'
                 elif x_cube == '#' and active >= 2 and active <= 3:
                     new_state[index_z][index_y][index_x] = '#'
                 else:
                     new_state[index_z][index_y][index_x] = '.'
-            
-            # print('')
-    
-        # print('')
 
     return new_state
 
-# updated_state = process_input(open_file())
-updated_state = process_input(open_file('17.1.input.test2.txt'))
-# initial_state = process_input(open_file('17.1.input.test.txt'))
+
+updated_state = process_input(open_file())
+# updated_state = process_input(open_file('17.1.input.test2.txt'))
+# updated_state = process_input(open_file('17.1.input.test.txt'))
 
 def plane_print(state):
     print('Printing')
-    for z_plane in state:
+    for index, z_plane in enumerate(state):
+        # print(f'z: {index}')
         for row in z_plane:
             print(row)
         
@@ -210,17 +209,13 @@ def count_active(state: list) -> int:
     
     return active_cubes
 
-# plane_print(initial_state)
 
-# updated_state = prepare_field(initial_state)
-
-# plane_print(updated_state)
-# updated_state = initial_state
+plane_print(updated_state)
 
 for round_number in range(6):
     
     updated_state = play_round(prepare_field(updated_state))
-    print(f'Round: {round_number}, active: {count_active(updated_state)}')
+    print(f'Round: {round_number}, active: {count_active(updated_state)}, dimensions: x:{len(updated_state[0][0])}, y:{len(updated_state[0])}, z:{len(updated_state)}')
 
     plane_print(updated_state)
 
