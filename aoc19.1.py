@@ -74,9 +74,12 @@ print(final_rule)
 
 matching_messages = 0
 
-for message in messages:
-    if re.fullmatch(final_rule, message):
-        matching_messages += 1
+with open('unmatched_messages.txt', 'w+', encoding='utf8') as output_file:
+    for message in messages:
+        if re.fullmatch(final_rule, message):
+            matching_messages += 1
+        else:
+            output_file.write(message + '\n')
 
 print(matching_messages)
 # print(messages)
