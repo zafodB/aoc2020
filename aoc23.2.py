@@ -1,32 +1,44 @@
-# puzzle_input = '463528179' 
-puzzle_input = '389125467' # test input
+from tqdm import tqdm
+import networkx as nx
+
+puzzle_input = '463528179' 
+# puzzle_input = '389125467' # test input
 
 number_of_cups = 1000000
+# number_of_cups = 9
 
-cup_circle = [int(_) for _ in puzzle_input]
+cup_graph = nx.DiGraph()
 
-for more_cup in range(10, 1000001):
-    cup_circle.append(more_cup)
+# previous = int(puzzle_input[-1])
+previous = 1000000
 
-print(len(cup_circle))
+for cup in puzzle_input:
+    current = int(cup)
+    cup_graph.add_edge(previous, current)
+    previous = current
 
-def make_move(input_circle: list, current_cup: int) -> list:
+for more_cup in range(10, number_of_cups + 1):
+    cup_graph.add_edge(previous, more_cup)
+    previous = more_cup
 
-    # print(f'Current circle: {input_circle}')
 
-    current_cup_index = input_circle.index(current_cup)
+def make_move(input_graph: nx.DiGraph, current_cup: int):
+    start_pickup = next(input_graph.successors(current_cup))
 
-    pick_three = []
-    
-    for i in range(3):
-        pick_index = i + current_cup_index + 1
-        if pick_index > number_of_cups - 1:
-            pick_index -= number_of_cups
+    input_graph.remove_edge(current_cup, start_pickup)
 
-        pick_three.append(input_circle[pick_index])
+    pick_three = [start_pickup]
 
-    for cup in pick_three:
-        input_circle.remove(cup)
+    latest_end = start_pickup
+    for i in range(2):
+        
+        latest_end = next(input_graph.successors(latest_end))
+        pick_three.append(latest_end)
+
+    next_after_pickup = next(input_graph.successors(latest_end))
+
+    input_graph.remove_edge(latest_end, next_after_pickup)
+    input_graph.add_edge(current_cup, next_after_pickup)
 
     destination_cup = current_cup - 1
     if destination_cup < 1:
@@ -39,34 +51,21 @@ def make_move(input_circle: list, current_cup: int) -> list:
         if destination_cup < 1:
             destination_cup += number_of_cups
 
-    destination_cup_index = input_circle.index(destination_cup)
-    for cup in reversed(pick_three):
-        input_circle.insert(destination_cup_index + 1 , cup)
+    destination_end = next(input_graph.successors(destination_cup))
 
-    return input_circle
+    input_graph.remove_edge(destination_cup, destination_end)
 
-
-current_cup_value = cup_circle[number_of_cups - 1]
-
-counter = 0
-for number_of_moves in range(10000000):
-    counter += 1
-
-    if counter % 1000 == 0:
-        print(f'Progress: {counter}')
-
-    current_cup_index = cup_circle.index(current_cup_value)
-
-    current_cup_index += 1
-    if current_cup_index > number_of_cups - 1:
-        current_cup_index -= number_of_cups
+    input_graph.add_edge(destination_cup, start_pickup)
+    input_graph.add_edge(latest_end, destination_end)
     
-    current_cup_value = cup_circle[current_cup_index]
+    return input_graph
 
-    cup_circle = make_move(cup_circle, current_cup_value)
 
-index_of_cup_one = cup_circle.index(1)
+current_cup = int(puzzle_input[0])
+for number_of_moves in tqdm(range(10000000)):
+    cup_graph = make_move(cup_graph, current_cup)
 
-print(f'RESULT: {cup_circle[index_of_cup_one+1]} and {cup_circle[index_of_cup_one+2]} \n')
+    current_cup = next(cup_graph.successors(current_cup))
 
-# Submit answer starting from cup 1 clockwise
+print(next(cup_graph.successors(1)))
+print(next(cup_graph.successors(next(cup_graph.successors(1)))))
