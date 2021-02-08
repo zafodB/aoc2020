@@ -1,18 +1,16 @@
-from collections import deque
-
 # puzzle_input = '463528179' 
 puzzle_input = '389125467' # test input
 
 number_of_cups = 1000000
 
-cup_circle = deque([int(_) for _ in puzzle_input])
+cup_circle = [int(_) for _ in puzzle_input]
 
 for more_cup in range(10, 1000001):
     cup_circle.append(more_cup)
 
 print(len(cup_circle))
 
-def make_move(input_circle: deque, current_cup: int) -> deque:
+def make_move(input_circle: list, current_cup: int) -> list:
 
     # print(f'Current circle: {input_circle}')
 
