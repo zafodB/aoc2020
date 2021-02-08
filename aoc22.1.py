@@ -27,10 +27,9 @@ def process_input(lines: list) -> dict:
 
     return player1_deck, player2_deck
 
+
 player1_deck, player2_deck = process_input(open_file())
 # player1_deck, player2_deck = process_input(open_file('22.1.input.test.txt'))
-
-# print(player1_deck)
 
 while not player1_deck.empty() and not player2_deck.empty():
     player1_hand, player2_hand = player1_deck.get(), player2_deck.get()
