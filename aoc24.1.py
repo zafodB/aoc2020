@@ -56,8 +56,8 @@ def process_input(lines: list) -> list:
     return directions
             
 
-tile_plan = process_input(open_file())
-# tile_plan = process_input(open_file('24.1.input.test.txt'))
+# tile_plan = process_input(open_file())
+tile_plan = process_input(open_file('24.1.input.test.txt'))
 
 floor_state = {0: {0: WHITE}}
 
@@ -104,10 +104,19 @@ for instruction in tile_plan:
 
     floor_state[current_position[0]][current_position[1]] = not floor_state[current_position[0]][current_position[1]]
 
-black_tile_counter = 0
-for row in floor_state.values():
-    for tile in row.values():
-        if tile:
-            black_tile_counter += 1
 
-print(black_tile_counter)
+def count_black_tiles(floor_map: dict) -> int:
+    black_tile_counter = 0
+    for row in floor_state.values():
+        for tile in row.values():
+            if tile:
+                black_tile_counter += 1
+    
+    return black_tile_counter
+
+import json
+
+with open('24.2.test.input.json', 'w+') as output_file:
+    json.dump(floor_state, output_file)
+
+print(count_black_tiles(floor_state))
